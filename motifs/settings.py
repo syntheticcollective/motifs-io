@@ -52,6 +52,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'motifs.urls'
+TEMPLATE_DIRS = os.path.join('motifs', 'templates')
 MAKO_TEMPLATE_DIRS = 'templates'
 
 TEMPLATES = [

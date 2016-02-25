@@ -43,6 +43,9 @@
 .midi-stream h2 {
   color: #2D882D;
 }
+.midi-stream .midi-track {
+  margin-bottom: 10px;
+}
 .midi-stream .midi-track h4 {
   color: #226666;
 }
