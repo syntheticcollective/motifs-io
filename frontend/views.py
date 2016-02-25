@@ -22,6 +22,11 @@ SOLR_ATTRS_TRANSLATION_TABLE = {
 }
 
 
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'frontend/home.mako', {})
+
+
 def build_solr_query_str(params):
     qs = []
     for p in params:
