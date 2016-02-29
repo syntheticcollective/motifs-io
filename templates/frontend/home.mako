@@ -8,35 +8,8 @@
         <link rel="stylesheet" href="/static/css/home.css" />
     </head>
     <body>
-        <nav class="navbar navbar-inverse">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Motifs.io</a>
-                </div>
-                <div id="navbar" class="collapse navbar-collapse pull-left">
-                    <ul class="nav navbar-nav">
-                        <li><a href="/fe/upload">Upload</a></li>
-                        <li><a href="/fe/search">Search</a></li>
-                        <li class="hidden-nav"><a href="#">Login</a></li>
-                        <li class="hidden-nav"><a href="#">Signup</a></li>
-                    </ul>
-                </div><!--/.nav-collapse -->
-                <div class="pull-right action-buttons">
-                    <button type="button" class="btn login-btn btn-primary">Login</button>
-                    <button type="button" class="btn signup-btn btn-success">Signup</button>
-                </div>
+        <%include file="navbar.mako" />
 
-            </div>
-            <div class="header-image">
-
-            </div>
-        </nav>
         <div class="container" role="main">
             <div class="row">
                 <div class="col-md-8">

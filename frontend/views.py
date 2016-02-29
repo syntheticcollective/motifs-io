@@ -1,14 +1,19 @@
-from djangomako.shortcuts import render_to_response
-from django.shortcuts import render
-from django.views.generic import View
-import requests
 import os
 
-from api.lib.midas.header import MotifHeader
-from api.lib.midas.encoder import BinaryEncoder
-from api.lib.midas.file import MIDIFile
+import requests
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.core.context_processors import csrf
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect
+from django.views.generic import View
+from djangomako.shortcuts import render_to_response
+
 from api.lib.midas.constants.key import key_to_byte
 from api.lib.midas.constants.mode import mode_to_byte
+from api.lib.midas.encoder import BinaryEncoder
+from api.lib.midas.file import MIDIFile
+from api.lib.midas.header import MotifHeader
 
 SOLR_URL = 'http://localhost:8983/solr/motifs/select'
 SOLR_UPLOAD_URL = 'http://localhost:8983/solr/motifs/update/extract'
@@ -24,7 +29,57 @@ SOLR_ATTRS_TRANSLATION_TABLE = {
 
 class HomeView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'frontend/home.mako', {})
+        return render_to_response('frontend/home.mako', {
+            'user': request.user
+        })
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect('/')
+
+
+class LoginView(View):
+    def get(self, request, *args, **kwargs):
+        context = {
+            'csrftoken': csrf(request)['csrf_token'],
+            'user': request.user
+        }
+        return render_to_response('frontend/login.mako', context)
+
+    def post(self, request, *args, **kwargs):
+        username = request.POST['user_name']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('/')
+            else:
+                return HttpResponseForbidden()
+        else:
+            return HttpResponseForbidden()
+
+
+class SignupView(View):
+    def get(self, request, *args, **kwargs):
+        context = {
+            'csrftoken': csrf(request)['csrf_token'],
+            'user': request.user
+        }
+        return render_to_response('frontend/signup.mako', context)
+
+    def post(self, request, *args, **kwargs):
+        user = User.objects.create_user(
+            request.POST['user_name'],
+            request.POST['email'],
+            request.POST['password']
+        )
+        user.first_name = request.POST['first_name']
+        user.last_name = request.POST['last_name']
+        user.save()
+        return redirect('login')
 
 
 def build_solr_query_str(params):
